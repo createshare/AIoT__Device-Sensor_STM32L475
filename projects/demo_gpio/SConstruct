@@ -37,6 +37,7 @@ Export('RTT_ROOT')
 Export('rtconfig')
 
 SDK_ROOT = os.path.abspath('./')
+bsp_vdir = 'build'
 
 if os.path.exists(SDK_ROOT + '/libraries'):
     libraries_path_prefix = SDK_ROOT + '/libraries'
@@ -53,12 +54,12 @@ stm32_library = 'STM32L4xx_HAL'
 rtconfig.BSP_LIBRARY_TYPE = stm32_library
 
 # include libraries
-objs.extend(SConscript(os.path.join(libraries_path_prefix, stm32_library, 'SConscript')))
+objs.extend(SConscript(os.path.join(libraries_path_prefix, stm32_library, 'SConscript'), variant_dir = bsp_vdir + '/libraries/STM32L4xx_HAL', duplicate = 0))
 
 # include drivers
-objs.extend(SConscript(os.path.join(libraries_path_prefix, 'HAL_Drivers', 'SConscript')))
+objs.extend(SConscript(os.path.join(libraries_path_prefix, 'HAL_Drivers', 'SConscript'), variant_dir = bsp_vdir + '/libraries/HAL_Drivers', duplicate = 0))
 
-objs.extend(SConscript(os.path.join(os.getcwd(), 'board', 'ports', 'SConscript')))
+objs.extend(SConscript(os.path.join(libraries_path_prefix, 'board', 'ports','SConscript'), variant_dir = bsp_vdir + '/board/ports', duplicate = 0))
 
 # make a building
 DoBuilding(TARGET, objs)
